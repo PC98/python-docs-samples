@@ -15,7 +15,7 @@
 import webapp2
 
 form = """
-	<form action="https://google.com/search">
+	<form action="/testform"> 
 		<input name="q">
 		<input type="submit">
 	</form>
@@ -24,10 +24,15 @@ form = """
 class MainPage(webapp2.RequestHandler): # It inherits from webapp2.RequestHandler
     def get(self):
         self.response.headers['Content-Type'] = 'text/html' # self.response is the global response object that the app uses. We set the Content-Type header, the default value of which is text/html
-        self.response.write(form) # writes this string
+        self.response.out.write(form) # writes this string
 
+class TestHandler(webapp2.RequestHandler):
+    def get(self):
+        q = self.request.get("q") # the request parameter
+        self.response.out.write(q)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/testform', TestHandler)
 ], debug=True) # URL mapping section. The "/" URL maps to the handler MainPage. MainPage defined in the class.
-
+# we need to handle /testform now, need to map the URL
