@@ -133,10 +133,7 @@ def _setup_appengine_sdk(session):
 #
 
 
-PYTEST_COMMON_ARGS = [
-    '--cov',
-    '--cov-config', os.path.abspath('.coveragerc'),
-    '--cov-report', 'term']
+PYTEST_COMMON_ARGS = []
 
 FLAKE8_COMMON_ARGS = [
     '--show-source', '--builtin', 'gettext', '--max-complexity', '20',
@@ -213,9 +210,9 @@ def session_py27(session, sample):
 
 
 @nox.parametrize('sample', NON_GAE_STANDARD_SAMPLES)
-def session_py35(session, sample):
-    """Runs py.test for a sample using Python 3.5"""
-    session.interpreter = 'python3.5'
+def session_py36(session, sample):
+    """Runs py.test for a sample using Python 3.6"""
+    session.interpreter = 'python3.6'
     _session_tests(session, sample)
 
 

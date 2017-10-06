@@ -5,6 +5,10 @@ Google Cloud Speech API Python Samples
 
 This directory contains samples for Google Cloud Speech API. The `Google Cloud Speech API`_ enables easy integration of Google speech recognition technologies into developer applications. Send audio and receive a text transcription from the Cloud Speech API service.
 
+- See the `migration guide`_ for information about migrating to Python client library v0.27.
+
+.. _migration guide: https://cloud.google.com/speech/docs/python-client-migration
+
 
 
 
@@ -17,34 +21,12 @@ Setup
 Authentication
 ++++++++++++++
 
-Authentication is typically done through `Application Default Credentials`_,
-which means you do not have to change the code to authenticate as long as
-your environment has credentials. You have a few options for setting up
-authentication:
+This sample requires you to have authentication setup. Refer to the
+`Authentication Getting Started Guide`_ for instructions on setting up
+credentials for applications.
 
-#. When running locally, use the `Google Cloud SDK`_
-
-    .. code-block:: bash
-
-        gcloud auth application-default login
-
-
-#. When running on App Engine or Compute Engine, credentials are already
-   set-up. However, you may need to configure your Compute Engine instance
-   with `additional scopes`_.
-
-#. You can create a `Service Account key file`_. This file can be used to
-   authenticate to Google Cloud Platform services from any environment. To use
-   the file, set the ``GOOGLE_APPLICATION_CREDENTIALS`` environment variable to
-   the path to the key file, for example:
-
-    .. code-block:: bash
-
-        export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_account.json
-
-.. _Application Default Credentials: https://cloud.google.com/docs/authentication#getting_credentials_for_server-centric_flow
-.. _additional scopes: https://cloud.google.com/compute/docs/authentication#using
-.. _Service Account key file: https://developers.google.com/identity/protocols/OAuth2ServiceAccount#creatinganaccount
+.. _Authentication Getting Started Guide:
+    https://cloud.google.com/docs/authentication/getting-started
 
 Install Dependencies
 ++++++++++++++++++++
@@ -128,6 +110,32 @@ To run this sample:
     Example usage:
         python transcribe_async.py resources/audio.raw
         python transcribe_async.py gs://cloud-samples-tests/speech/vr.flac
+    
+    positional arguments:
+      path        File or GCS path for audio file to be recognized
+    
+    optional arguments:
+      -h, --help  show this help message and exit
+
+
+Transcribe with word time offsets
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+To run this sample:
+
+.. code-block:: bash
+
+    $ python transcribe_word_time_offsets.py
+
+    usage: transcribe_word_time_offsets.py [-h] path
+    
+    Google Cloud Speech API sample that demonstrates word time offsets.
+    
+    Example usage:
+        python transcribe_word_time_offsets.py resources/audio.raw
+        python transcribe_word_time_offsets.py         gs://cloud-samples-tests/speech/vr.flac
     
     positional arguments:
       path        File or GCS path for audio file to be recognized

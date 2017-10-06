@@ -24,36 +24,40 @@ you may consult the docs at
 https://cloud.google.com/storage/docs/reporting-changes or follow the steps
 below:
 
-1. Activate the Google Cloud Pub/Sub API, if you have not already done so.
+1. First, follow the common setup steps for these snippets, specically
+   configuring auth and installing dependencies. See the README's "Setup"
+   section.
+
+2. Activate the Google Cloud Pub/Sub API, if you have not already done so.
    https://console.cloud.google.com/flows/enableapi?apiid=pubsub
 
-2. Create a Google Cloud Storage bucket:
+3. Create a Google Cloud Storage bucket:
    $ gsutil mb gs://testbucket
 
-3. Create a Cloud Pub/Sub topic and publish bucket notifications there:
+4. Create a Cloud Pub/Sub topic and publish bucket notifications there:
    $ gsutil notification create -f json -t testtopic gs://testbucket
 
-4. Create a subscription for your new topic:
+5. Create a subscription for your new topic:
    $ gcloud beta pubsub subscriptions create testsubscription --topic=testtopic
 
-5. Run this program:
-   $ python notification_polling testsubscription
+6. Run this program:
+   $ python notification_polling.py my-project-id testsubscription
 
-6. While the program is running, upload and delete some files in the testbucket
+7. While the program is running, upload and delete some files in the testbucket
    bucket (you could use the console or gsutil) and watch as changes scroll by
    in the app.
 """
 
 import argparse
 import json
-import sys
+import time
 
-from google.cloud import pubsub
+from google.cloud import pubsub_v1
 
 
 def summarize(message):
     # [START parse_message]
-    data = message.data
+    data = message.data.decode('utf-8')
     attributes = message.attributes
 
     event_type = attributes['eventType']
@@ -69,6 +73,13 @@ def summarize(message):
             bucket_id=bucket_id,
             object_id=object_id,
             generation=generation)
+
+    if 'overwroteGeneration' in attributes:
+        description += '\tOverwrote generation: %s\n' % (
+            attributes['overwroteGeneration'])
+    if 'overwrittenByGeneration' in attributes:
+        description += '\tOverwritten by generation: %s\n' % (
+            attributes['ovewrittenByGeneration'])
 
     payload_format = attributes['payloadFormat']
     if payload_format == 'JSON_API_V1':
@@ -87,31 +98,35 @@ def summarize(message):
     # [END parse_message]
 
 
-def poll_notifications(subscription_id):
+def poll_notifications(project, subscription_name):
     """Polls a Cloud Pub/Sub subscription for new GCS events for display."""
     # [BEGIN poll_notifications]
-    client = pubsub.Client()
-    subscription = pubsub.subscription.Subscription(
-        subscription_id, client=client)
+    subscriber = pubsub_v1.SubscriberClient()
+    subscription_path = subscriber.subscription_path(
+        project, subscription_name)
 
-    if not subscription.exists():
-        sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
-        return
+    def callback(message):
+        print('Received message:\n{}'.format(summarize(message)))
+        message.ack()
 
-    print('Polling for messages. Press ctrl+c to exit.')
+    subscriber.subscribe(subscription_path, callback=callback)
+
+    # The subscriber is non-blocking, so we must keep the main thread from
+    # exiting to allow it to process messages in the background.
+    print('Listening for messages on {}'.format(subscription_path))
     while True:
-        pulled = subscription.pull(max_messages=100)
-        for ack_id, message in pulled:
-            print('Received message {0}:\n{1}'.format(
-                message.message_id, summarize(message)))
-            subscription.acknowledge([ack_id])
+        time.sleep(60)
     # [END poll_notifications]
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description=__doc__)
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument(
+        'project',
+        help='The ID of the project that owns the subscription')
     parser.add_argument('subscription',
                         help='The ID of the Pub/Sub subscription')
     args = parser.parse_args()
-    poll_notifications(args.subscription)
+    poll_notifications(args.project, args.subscription)
