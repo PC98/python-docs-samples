@@ -15,21 +15,23 @@
 import webapp2
 
 form = """
-	<form action="/testform"> 
+	<form method="post" action="/testform">
 		<input name="q">
 		<input type="submit">
 	</form>
 	"""
+  # default method is post
 
 class MainPage(webapp2.RequestHandler): # It inherits from webapp2.RequestHandler
     def get(self):
         self.response.headers['Content-Type'] = 'text/html' # self.response is the global response object that the app uses. We set the Content-Type header, the default value of which is text/html
         self.response.out.write(form) # writes this string
 
-class TestHandler(webapp2.RequestHandler):
-    def get(self):
+class TestHandler(webapp2.RequestHandler): # needs to handle post requests
+    def post(self):
         q = self.request.get("q") # the request parameter
         self.response.out.write(q)
+# Works exactly like it did before, except this time the query parameter is not in our URL but in our HTTP body
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
