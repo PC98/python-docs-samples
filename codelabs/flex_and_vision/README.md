@@ -1,5 +1,10 @@
 # Python Google Cloud Vision sample for Google App Engine Flexible Environment
 
+[![Open in Cloud Shell][shell_img]][shell_link]
+
+[shell_img]: http://gstatic.com/cloudssh/images/open-btn.png
+[shell_link]: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=codelabs/flex_and_vision/README.md
+
 This sample demonstrates how to use the [Google Cloud Vision API](https://cloud.google.com/vision/), [Google Cloud Storage](https://cloud.google.com/storage/), and [Google Cloud Datastore](https://cloud.google.com/datastore/) on [Google App Engine Flexible Environment](https://cloud.google.com/appengine).
 
 ## Setup
@@ -40,9 +45,9 @@ Change directory to the sample code location:
 
 Enable the APIs:
 
-    gcloud service-management enable vision.googleapis.com
-    gcloud service-management enable storage-component.googleapis.com
-    gcloud service-management enable datastore.googleapis.com
+    gcloud services enable vision.googleapis.com
+    gcloud services enable storage-component.googleapis.com
+    gcloud services enable datastore.googleapis.com
 
 Create a Service Account to access the Google Cloud APIs when testing locally:
 

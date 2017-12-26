@@ -3,6 +3,10 @@
 Google Cloud Video Intelligence API Python Samples
 ===============================================================================
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=video/cloud-client/labels/README.rst
+
+
 This directory contains samples for Google Cloud Video Intelligence API. `Google Cloud Video Intelligence API`_ allows developers to easily integrate feature detection in video.
 
 
@@ -27,7 +31,10 @@ credentials for applications.
 Install Dependencies
 ++++++++++++++++++++
 
-#. Install `pip`_ and `virtualenv`_ if you do not already have them.
+#. Install `pip`_ and `virtualenv`_ if you do not already have them. You may want to refer to the `Python Development Environment Setup Guide`_ for Google Cloud Platform for instructions.
+
+ .. _Python Development Environment Setup Guide:
+     https://cloud.google.com/python/setup
 
 #. Create a virtualenv. Samples are compatible with Python 2.7 and 3.4+.
 
@@ -51,6 +58,10 @@ Samples
 labels
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=video/cloud-client/labels/labels.py;video/cloud-client/labels/README.rst
+
+
 
 
 To run this sample:
@@ -60,22 +71,24 @@ To run this sample:
     $ python labels.py
 
     usage: labels.py [-h] path
-    
-    This application demonstrates how to perform basic operations with the
-    Google Cloud Video Intelligence API.
-    
+
+    This application demonstrates how to detect labels from a video
+    based on the image content with the Google Cloud Video Intelligence
+    API.
+
     For more information, check out the documentation at
     https://cloud.google.com/videointelligence/docs.
-    
+
     Usage Example:
-    
+
         python labels.py gs://cloud-ml-sandbox/video/chicago.mp4
-    
+
     positional arguments:
       path        GCS file path for label detection.
-    
+
     optional arguments:
       -h, --help  show this help message and exit
+
 
 
 

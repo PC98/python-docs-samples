@@ -15,10 +15,10 @@
 import os
 import time
 
+from google.cloud import pubsub
 import pytest
 
 import manager
-
 
 cloud_region = 'us-central1'
 device_id_template = 'test-device-{}'
@@ -35,12 +35,13 @@ registry_id = 'test-registry-{}'.format(int(time.time()))
 
 @pytest.fixture(scope='module')
 def test_topic():
-    topic = manager.create_iot_topic(topic_id)
+    topic = manager.create_iot_topic(project_id, topic_id)
 
     yield topic
 
-    if topic.exists():
-        topic.delete()
+    pubsub_client = pubsub.PublisherClient()
+    topic_path = pubsub_client.topic_path(project_id, topic_id)
+    pubsub_client.delete_topic(topic_path)
 
 
 def test_create_delete_registry(test_topic, capsys):
@@ -82,6 +83,34 @@ def test_add_delete_unauth_device(test_topic, capsys):
 
     out, _ = capsys.readouterr()
     assert 'UNAUTH' in out
+
+
+def test_add_config_unauth_device(test_topic, capsys):
+    device_id = device_id_template.format('UNAUTH')
+    manager.open_registry(
+            service_account_json, project_id, cloud_region, pubsub_topic,
+            registry_id)
+
+    manager.create_unauth_device(
+            service_account_json, project_id, cloud_region, registry_id,
+            device_id)
+
+    manager.set_config(
+            service_account_json, project_id, cloud_region, registry_id,
+            device_id, 0, 'test')
+
+    manager.get_device(
+            service_account_json, project_id, cloud_region, registry_id,
+            device_id)
+
+    manager.delete_device(
+            service_account_json, project_id, cloud_region, registry_id,
+            device_id)
+
+    out, _ = capsys.readouterr()
+    assert 'Set device configuration' in out
+    assert 'UNAUTH' in out
+    assert 'version: 2' in out
 
 
 def test_add_delete_rs256_device(test_topic, capsys):

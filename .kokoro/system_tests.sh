@@ -27,7 +27,6 @@ export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/testing/service-account.json
 export GOOGLE_CLIENT_SECRETS=$(pwd)/testing/client-secrets.json
 
 # Run tests
-pip install --upgrade nox-automation
 nox -k "${NOX_SESSION}" || ret_code=$?
 
 # Workaround for Kokoro permissions issue: delete secrets

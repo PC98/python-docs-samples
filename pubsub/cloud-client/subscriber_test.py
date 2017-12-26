@@ -38,7 +38,7 @@ def topic(publisher_client):
 
     try:
         publisher_client.delete_topic(topic_path)
-    except:
+    except Exception:
         pass
 
     publisher_client.create_topic(topic_path)
@@ -58,7 +58,7 @@ def subscription(subscriber_client, topic):
 
     try:
         subscriber_client.delete_subscription(subscription_path)
-    except:
+    except Exception:
         pass
 
     subscriber_client.create_subscription(subscription_path, topic=topic)
@@ -66,10 +66,18 @@ def subscription(subscriber_client, topic):
     yield subscription_path
 
 
-def test_list(subscription, capsys):
+def test_list_in_topic(subscription, capsys):
     @eventually_consistent.call
     def _():
-        subscriber.list_subscriptions(PROJECT, TOPIC)
+        subscriber.list_subscriptions_in_topic(PROJECT, TOPIC)
+        out, _ = capsys.readouterr()
+        assert subscription in out
+
+
+def test_list_in_project(subscription, capsys):
+    @eventually_consistent.call
+    def _():
+        subscriber.list_subscriptions_in_project(PROJECT)
         out, _ = capsys.readouterr()
         assert subscription in out
 
@@ -79,7 +87,7 @@ def test_create(subscriber_client):
         PROJECT, SUBSCRIPTION)
     try:
         subscriber_client.delete_subscription(subscription_path)
-    except:
+    except Exception:
         pass
 
     subscriber.create_subscription(PROJECT, TOPIC, SUBSCRIPTION)

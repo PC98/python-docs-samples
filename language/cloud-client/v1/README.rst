@@ -3,6 +3,10 @@
 Google Cloud Natural Language API Python Samples
 ===============================================================================
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=language/cloud-client/v1/README.rst
+
+
 This directory contains samples for Google Cloud Natural Language API. The `Google Cloud Natural Language API`_ provides natural language understanding technologies to developers, including sentiment analysis, entity recognition, and syntax analysis. This API is part of the larger Cloud Machine Learning API.
 
 - See the `migration guide`_ for information about migrating to Python client library v0.26.1.
@@ -31,7 +35,10 @@ credentials for applications.
 Install Dependencies
 ++++++++++++++++++++
 
-#. Install `pip`_ and `virtualenv`_ if you do not already have them.
+#. Install `pip`_ and `virtualenv`_ if you do not already have them. You may want to refer to the `Python Development Environment Setup Guide`_ for Google Cloud Platform for instructions.
+
+ .. _Python Development Environment Setup Guide:
+     https://cloud.google.com/python/setup
 
 #. Create a virtualenv. Samples are compatible with Python 2.7 and 3.4+.
 
@@ -55,6 +62,10 @@ Samples
 Quickstart
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=language/cloud-client/v1/quickstart.py;language/cloud-client/v1/README.rst
+
+
 
 
 To run this sample:
@@ -67,6 +78,10 @@ To run this sample:
 Snippets
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=language/cloud-client/v1/snippets.py;language/cloud-client/v1/README.rst
+
+
 
 
 To run this sample:
@@ -76,17 +91,20 @@ To run this sample:
     $ python snippets.py
 
     usage: snippets.py [-h]
-                       {sentiment-entities-text,sentiment-entities-file,sentiment-text,sentiment-file,entities-text,entities-file,syntax-text,syntax-file}
+                       {classify-text,classify-file,sentiment-entities-text,sentiment-entities-file,sentiment-text,sentiment-file,entities-text,entities-file,syntax-text,syntax-file}
                        ...
-    
+
     This application demonstrates how to perform basic operations with the
     Google Cloud Natural Language API
-    
+
     For more information, the documentation at
     https://cloud.google.com/natural-language/docs.
-    
+
     positional arguments:
-      {sentiment-entities-text,sentiment-entities-file,sentiment-text,sentiment-file,entities-text,entities-file,syntax-text,syntax-file}
+      {classify-text,classify-file,sentiment-entities-text,sentiment-entities-file,sentiment-text,sentiment-file,entities-text,entities-file,syntax-text,syntax-file}
+        classify-text       Classifies content categories of the provided text.
+        classify-file       Classifies content categories of the text in a Google
+                            Cloud Storage file.
         sentiment-entities-text
                             Detects entity sentiment in the provided text.
         sentiment-entities-file
@@ -101,9 +119,10 @@ To run this sample:
         syntax-text         Detects syntax in the text.
         syntax-file         Detects syntax in the file located in Google Cloud
                             Storage.
-    
+
     optional arguments:
       -h, --help            show this help message and exit
+
 
 
 

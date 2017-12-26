@@ -3,6 +3,10 @@
 Stackdriver Logging Python Samples
 ===============================================================================
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=logging/cloud-client/README.rst
+
+
 This directory contains samples for Stackdriver Logging. `Stackdriver Logging`_ allows you to store, search, analyze, monitor, and alert on log data and events from Google Cloud Platform and Amazon Web Services.
 
 
@@ -27,7 +31,10 @@ credentials for applications.
 Install Dependencies
 ++++++++++++++++++++
 
-#. Install `pip`_ and `virtualenv`_ if you do not already have them.
+#. Install `pip`_ and `virtualenv`_ if you do not already have them. You may want to refer to the `Python Development Environment Setup Guide`_ for Google Cloud Platform for instructions.
+
+ .. _Python Development Environment Setup Guide:
+     https://cloud.google.com/python/setup
 
 #. Create a virtualenv. Samples are compatible with Python 2.7 and 3.4+.
 
@@ -51,6 +58,10 @@ Samples
 Quickstart
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=logging/cloud-client/quickstart.py;logging/cloud-client/README.rst
+
+
 
 
 To run this sample:
@@ -63,6 +74,10 @@ To run this sample:
 Snippets
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=logging/cloud-client/snippets.py;logging/cloud-client/README.rst
+
+
 
 
 To run this sample:
@@ -72,13 +87,13 @@ To run this sample:
     $ python snippets.py
 
     usage: snippets.py [-h] logger_name {list,write,delete} ...
-    
+
     This application demonstrates how to perform basic operations on logs and
     log entries with Stackdriver Logging.
-    
+
     For more information, see the README.md under /logging and the
     documentation at https://cloud.google.com/logging/docs.
-    
+
     positional arguments:
       logger_name          Logger name
       {list,write,delete}
@@ -86,13 +101,18 @@ To run this sample:
         write              Writes log entries to the given logger.
         delete             Deletes a logger and all its entries. Note that a
                            deletion can take several minutes to take effect.
-    
+
     optional arguments:
       -h, --help           show this help message and exit
 
 
+
 Export
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=logging/cloud-client/export.py;logging/cloud-client/README.rst
+
 
 
 
@@ -103,7 +123,7 @@ To run this sample:
     $ python export.py
 
     usage: export.py [-h] {list,create,update,delete} ...
-    
+
     positional arguments:
       {list,create,update,delete}
         list                Lists all sinks.
@@ -116,9 +136,10 @@ To run this sample:
                             om/logging/docs/view/advanced_filters for more filter
                             information.
         delete              Deletes a sink.
-    
+
     optional arguments:
       -h, --help            show this help message and exit
+
 
 
 

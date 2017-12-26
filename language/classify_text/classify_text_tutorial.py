@@ -27,10 +27,7 @@ import io
 import json
 import os
 
-from google.cloud import language_v1beta2
-from google.cloud.language_v1beta2 import enums
-from google.cloud.language_v1beta2 import types
-
+from google.cloud import language
 import numpy
 import six
 # [END classify_text_tutorial_import]
@@ -40,11 +37,11 @@ import six
 def classify(text, verbose=True):
     """Classify the input text into categories. """
 
-    language_client = language_v1beta2.LanguageServiceClient()
+    language_client = language.LanguageServiceClient()
 
-    document = types.Document(
+    document = language.types.Document(
         content=text,
-        type=enums.Document.Type.PLAIN_TEXT)
+        type=language.enums.Document.Type.PLAIN_TEXT)
     response = language_client.classify_text(document)
     categories = response.categories
 
@@ -86,11 +83,11 @@ def index(path, index_file):
                 categories = classify(text, verbose=False)
 
                 result[filename] = categories
-        except:
+        except Exception:
             print('Failed to process {}'.format(file_path))
 
-    with io.open(index_file, 'w') as f:
-        f.write(unicode(json.dumps(result)))
+    with io.open(index_file, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(result, ensure_ascii=False))
 
     print('Texts indexed in file: {}'.format(index_file))
     return result
@@ -133,8 +130,8 @@ def similarity(categories1, categories2):
     categories1 = split_labels(categories1)
     categories2 = split_labels(categories2)
 
-    norm1 = numpy.linalg.norm(categories1.values())
-    norm2 = numpy.linalg.norm(categories2.values())
+    norm1 = numpy.linalg.norm(list(categories1.values()))
+    norm2 = numpy.linalg.norm(list(categories2.values()))
 
     # Return the smallest possible similarity if either categories is empty.
     if norm1 == 0 or norm2 == 0:

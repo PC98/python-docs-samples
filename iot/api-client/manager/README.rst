@@ -3,6 +3,10 @@
 Google Cloud IoT Core API Python Samples
 ===============================================================================
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=iot/api-client/manager/README.rst
+
+
 This directory contains samples for Google Cloud IoT Core API. `Google Cloud IoT Core`_ allows developers to easily integrate Publish and Subscribe functionality with devices and programmatically manage device authorization.
 
 
@@ -27,7 +31,10 @@ credentials for applications.
 Install Dependencies
 ++++++++++++++++++++
 
-#. Install `pip`_ and `virtualenv`_ if you do not already have them.
+#. Install `pip`_ and `virtualenv`_ if you do not already have them. You may want to refer to the `Python Development Environment Setup Guide`_ for Google Cloud Platform for instructions.
+
+ .. _Python Development Environment Setup Guide:
+     https://cloud.google.com/python/setup
 
 #. Create a virtualenv. Samples are compatible with Python 2.7 and 3.4+.
 
@@ -51,6 +58,10 @@ Samples
 Manager
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+.. image:: https://gstatic.com/cloudssh/images/open-btn.png
+   :target: https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/python-docs-samples&page=editor&open_in_editor=iot/api-client/manager/manager.py;iot/api-client/manager/README.rst
+
+
 
 
 To run this sample:
@@ -67,12 +78,12 @@ To run this sample:
                       [--registry_id REGISTRY_ID] [--device_id DEVICE_ID]
                       {create-es256,create-registry,create-rsa256,create-topic,create-unauth,delete-device,delete-registry,get,get-registry,get-state,list,list-registries,patch-es256,patch-rs256}
                       ...
-    
+
     Example of using the Google Cloud IoT Core device manager to administer
     devices.
-    
+
     Usage example:
-    
+
         python manager.py \
           --project_id=my-project-id \
           --pubsub_topic=projects/my-project-id/topics/my-topic-id \
@@ -80,7 +91,7 @@ To run this sample:
           --rsa_certificate_file=../rsa_cert.pem \
           --service_account_json=$HOME/service_account.json
           list
-    
+
     positional arguments:
       {create-es256,create-registry,create-rsa256,create-topic,create-unauth,delete-device,delete-registry,get,get-registry,get-state,list,list-registries,patch-es256,patch-rs256}
         create-es256        Create a new device with the given id, using ES256 for
@@ -102,7 +113,7 @@ To run this sample:
                             device.
         patch-rs256         Patch the device to add an RSA256 public key to the
                             device.
-    
+
     optional arguments:
       -h, --help            show this help message and exit
       --pubsub_topic PUBSUB_TOPIC
@@ -122,6 +133,7 @@ To run this sample:
                             Registry id. If not set, a name will be generated.
       --device_id DEVICE_ID
                             Device id.
+
 
 
 

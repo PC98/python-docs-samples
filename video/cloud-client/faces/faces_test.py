@@ -15,14 +15,18 @@
 # limitations under the License.
 
 import os
-import faces
+
 import pytest
+
+import faces
 
 
 BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
 FACES_FILE_PATH = '/video/googlework.mp4'
 
 
+@pytest.mark.xfail(reason='This feature is currently \
+    not visible to all projects.')
 @pytest.mark.slow
 def test_work_video_faces(capsys):
     faces.analyze_faces(

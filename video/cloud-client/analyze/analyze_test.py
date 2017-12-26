@@ -15,8 +15,10 @@
 # limitations under the License.
 
 import os
-import analyze
+
 import pytest
+
+import analyze
 
 
 BUCKET = os.environ['CLOUD_STORAGE_BUCKET']
@@ -34,6 +36,8 @@ def test_analyze_shots(capsys):
     assert 'Shot 1:' in out
 
 
+@pytest.mark.xfail(reason='This feature is currently \
+    not visible to all projects.')
 @pytest.mark.slow
 def test_analyze_faces(capsys):
     analyze.analyze_faces(
