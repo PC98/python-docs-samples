@@ -14,40 +14,96 @@
 
 import webapp2
 import cgi
+import re
 
 form = """
 <!DOCTYPE html>
 <html>
 <head>
-<title>Udacity Web Dev ROT13</title>
+<title>Udacity Web Dev Sign-up</title>
 </head>
 <body>
-<h2>Enter some text to ROT13:</h2>
+<h2>Sign-up</h2>
 <br>
-<textarea rows="4" cols="50" name="text" form="rot14">%s</textarea>
-<form method="post" id="rot14">
+<form method="post">
+    <label>
+        Username
+        <input type="text" name="username" value="%(username)s">
+    </label>
+    <span style="color: red">%(username_error)s</span>
+    <br>
+    <label>
+        Password
+        <input type="password" name="password">
+    </label>
+    <span style="color: red">%(pass_error)s</span>
+    <br>
+    <label>
+        Verify Password
+        <input type="password" name="verify">
+    </label>
+    <span style="color: red">%(verify_error)s</span>
+    <br>
+    <label>
+        Email (optional)
+        <input type="text" name="email" value="%(email)s">
+    </label>
+    <span style="color: red">%(email_error)s</span>
+    <br>
     <input type="submit">
 </form>
 </body>
 </html>
 """
 
-def get_rot13(char):
-    if char.isalpha():
-        temp_char = ord(char) + 13
-        if (char.islower() and not chr(temp_char).islower()) or (char.isupper() and not chr(temp_char).isupper()):
-            temp_char += ord('a') - ord('z') - 1
-        return chr(temp_char)
-    return char
+USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
+def valid_username(username):
+    return USER_RE.match(username)
+
+PASSWORD_RE = re.compile(r"^.{3,20}$")
+def valid_password(password):
+    return PASSWORD_RE.match(password)
+
+EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
+def valid_email(email):
+    if not email:
+        return True
+    return EMAIL_RE.match(email)
+
+def verify_password(str1, str2):
+    return str1 == str2
 
 class MainPage(webapp2.RequestHandler):
+    def write_form(self, username_error="", pass_error="", verify_error="", email_error="", username="", email=""):
+        self.response.out.write(form % {'username_error': username_error, 'pass_error': pass_error, 'verify_error': verify_error, 'email_error': email_error, 'username': username, 'email': email})
+
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write(form % "")
+        self.write_form()
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html'
-        rot_text =  "".join([get_rot13(char) for char in self.request.get('text')])
-        self.response.out.write(form % cgi.escape(rot_text, quote = True))
 
-app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
+        username = self.request.get('username')
+        password = self.request.get('password')
+        verify = self.request.get('verify')
+        email = self.request.get('email')
+
+        username_error = valid_username(username)
+        password_error = valid_password(password)
+        email_error = valid_email(email)
+        verify_error = verify_password(password, verify)
+
+        if not username_error or not password_error or not email_error or not verify_error:
+            self.write_form(username_error="Invalid username" if not username_error else "", pass_error="Invalid password" if not password_error else "",
+                verify_error="Passwords don't match" if not verify_error else "", email_error="Invalid email" if not email_error else "", username=username, email=email)
+        else:
+            self.redirect('/welcome?username=%s' % username)
+
+class WelcomePage(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write("<h2>Welcome, %s!</h2>" % self.request.get('username'))
+
+
+app = webapp2.WSGIApplication([('/', MainPage), ('/welcome', WelcomePage)], debug=True)
