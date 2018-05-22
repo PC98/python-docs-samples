@@ -28,35 +28,43 @@ from google.cloud import pubsub_v1
 
 def list_topics(project):
     """Lists all Pub/Sub topics in the given project."""
+    # [START pubsub_list_topics]
     publisher = pubsub_v1.PublisherClient()
     project_path = publisher.project_path(project)
 
     for topic in publisher.list_topics(project_path):
         print(topic)
+    # [END pubsub_list_topics]
 
 
 def create_topic(project, topic_name):
     """Create a new Pub/Sub topic."""
+    # [START pubsub_create_topic]
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic_name)
 
     topic = publisher.create_topic(topic_path)
 
     print('Topic created: {}'.format(topic))
+    # [END pubsub_create_topic]
 
 
 def delete_topic(project, topic_name):
     """Deletes an existing Pub/Sub topic."""
+    # [START pubsub_delete_topic]
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic_name)
 
     publisher.delete_topic(topic_path)
 
     print('Topic deleted: {}'.format(topic_path))
+    # [END pubsub_delete_topic]
 
 
 def publish_messages(project, topic_name):
     """Publishes multiple messages to a Pub/Sub topic."""
+    # [START pubsub_quickstart_publisher]
+    # [START pubsub_publish]
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic_name)
 
@@ -67,11 +75,33 @@ def publish_messages(project, topic_name):
         publisher.publish(topic_path, data=data)
 
     print('Published messages.')
+    # [END pubsub_quickstart_publisher]
+    # [END pubsub_publish]
+
+
+def publish_messages_with_custom_attributes(project, topic_name):
+    """Publishes multiple messages with custom attributes
+    to a Pub/Sub topic."""
+    # [START pubsub_publish_custom_attributes]
+    publisher = pubsub_v1.PublisherClient()
+    topic_path = publisher.topic_path(project, topic_name)
+
+    for n in range(1, 10):
+        data = u'Message number {}'.format(n)
+        # Data must be a bytestring
+        data = data.encode('utf-8')
+        # Add two attributes, origin and username, to the message
+        publisher.publish(
+            topic_path, data, origin='python-sample', username='gcp')
+
+    print('Published messages with custom attributes.')
+    # [END pubsub_publish_custom_attributes]
 
 
 def publish_messages_with_futures(project, topic_name):
     """Publishes multiple messages to a Pub/Sub topic and prints their
     message IDs."""
+    # [START pubsub_publisher_concurrency_control]
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project, topic_name)
 
@@ -90,10 +120,12 @@ def publish_messages_with_futures(project, topic_name):
     for future in futures:
         # result() blocks until the message is published.
         print(future.result())
+    # [END pubsub_publisher_concurrency_control]
 
 
 def publish_messages_with_batch_settings(project, topic_name):
     """Publishes multiple messages to a Pub/Sub topic with batch settings."""
+    # [START pubsub_publisher_batch_settings]
     # Configure the batch to publish once there is one kilobyte of data or
     # 1 second has passed.
     batch_settings = pubsub_v1.types.BatchSettings(
@@ -110,6 +142,7 @@ def publish_messages_with_batch_settings(project, topic_name):
         publisher.publish(topic_path, data=data)
 
     print('Published messages.')
+    # [END pubsub_publisher_batch_settings]
 
 
 if __name__ == '__main__':
@@ -132,6 +165,11 @@ if __name__ == '__main__':
         'publish', help=publish_messages.__doc__)
     publish_parser.add_argument('topic_name')
 
+    publish_with_custom_attributes_parser = subparsers.add_parser(
+        'publish-with-custom-attributes',
+        help=publish_messages_with_custom_attributes.__doc__)
+    publish_with_custom_attributes_parser.add_argument('topic_name')
+
     publish_with_futures_parser = subparsers.add_parser(
         'publish-with-futures',
         help=publish_messages_with_futures.__doc__)
@@ -152,6 +190,8 @@ if __name__ == '__main__':
         delete_topic(args.project, args.topic_name)
     elif args.command == 'publish':
         publish_messages(args.project, args.topic_name)
+    elif args.command == 'publish-with-custom-attributes':
+        publish_messages_with_custom_attributes(args.project, args.topic_name)
     elif args.command == 'publish-with-futures':
         publish_messages_with_futures(args.project, args.topic_name)
     elif args.command == 'publish-with-batch-settings':

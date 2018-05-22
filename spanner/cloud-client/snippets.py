@@ -25,6 +25,7 @@ import argparse
 from google.cloud import spanner
 
 
+# [START spanner_create_database]
 def create_database(instance_id, database_id):
     """Creates a database and tables for sample data."""
     spanner_client = spanner.Client()
@@ -52,8 +53,10 @@ def create_database(instance_id, database_id):
 
     print('Created database {} on instance {}'.format(
         database_id, instance_id))
+# [END spanner_create_database]
 
 
+# [START spanner_insert_data]
 def insert_data(instance_id, database_id):
     """Inserts sample data into the given database.
 
@@ -86,8 +89,10 @@ def insert_data(instance_id, database_id):
                 (2, 3, u'Terrified')])
 
     print('Inserted data.')
+# [END spanner_insert_data]
 
 
+# [START spanner_query_data]
 def query_data(instance_id, database_id):
     """Queries sample data from the database using SQL."""
     spanner_client = spanner.Client()
@@ -100,8 +105,10 @@ def query_data(instance_id, database_id):
 
         for row in results:
             print(u'SingerId: {}, AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_query_data]
 
 
+# [START spanner_read_data]
 def read_data(instance_id, database_id):
     """Reads sample data from the database."""
     spanner_client = spanner.Client()
@@ -117,8 +124,10 @@ def read_data(instance_id, database_id):
 
         for row in results:
             print(u'SingerId: {}, AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_read_data]
 
 
+# [START spanner_read_stale_data]
 def read_stale_data(instance_id, database_id):
     """Reads sample data from the database. The data is exactly 15 seconds
     stale."""
@@ -138,8 +147,10 @@ def read_stale_data(instance_id, database_id):
 
         for row in results:
             print(u'SingerId: {}, AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_read_stale_data]
 
 
+# [START spanner_query_data_with_new_column]
 def query_data_with_new_column(instance_id, database_id):
     """Queries sample data from the database using SQL.
 
@@ -160,8 +171,10 @@ def query_data_with_new_column(instance_id, database_id):
         for row in results:
             print(
                 u'SingerId: {}, AlbumId: {}, MarketingBudget: {}'.format(*row))
+# [END spanner_query_data_with_new_column]
 
 
+# [START spanner_create_index]
 def add_index(instance_id, database_id):
     """Adds a simple index to the example database."""
     spanner_client = spanner.Client()
@@ -175,8 +188,10 @@ def add_index(instance_id, database_id):
     operation.result()
 
     print('Added the AlbumsByAlbumTitle index.')
+# [END spanner_create_index]
 
 
+# [START spanner_query_data_with_index]
 def query_data_with_index(
         instance_id, database_id, start_title='Aardvark', end_title='Goo'):
     """Queries sample data from the database using SQL and an index.
@@ -220,8 +235,10 @@ def query_data_with_index(
             print(
                 u'AlbumId: {}, AlbumTitle: {}, '
                 'MarketingBudget: {}'.format(*row))
+# [END spanner_query_data_with_index]
 
 
+# [START spanner_read_data_with_index]
 def read_data_with_index(instance_id, database_id):
     """Reads sample data from the database using an index.
 
@@ -246,8 +263,10 @@ def read_data_with_index(instance_id, database_id):
 
         for row in results:
             print('AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_read_data_with_index]
 
 
+# [START spanner_create_storing_index]
 def add_storing_index(instance_id, database_id):
     """Adds an storing index to the example database."""
     spanner_client = spanner.Client()
@@ -262,8 +281,10 @@ def add_storing_index(instance_id, database_id):
     operation.result()
 
     print('Added the AlbumsByAlbumTitle2 index.')
+# [END spanner_create_storing_index]
 
 
+# [START spanner_read_data_with_storing_index]
 def read_data_with_storing_index(instance_id, database_id):
     """Reads sample data from the database using an index with a storing
     clause.
@@ -292,8 +313,10 @@ def read_data_with_storing_index(instance_id, database_id):
             print(
                 u'AlbumId: {}, AlbumTitle: {}, '
                 'MarketingBudget: {}'.format(*row))
+# [END spanner_read_data_with_storing_index]
 
 
+# [START spanner_add_column]
 def add_column(instance_id, database_id):
     """Adds a new column to the Albums table in the example database."""
     spanner_client = spanner.Client()
@@ -307,8 +330,10 @@ def add_column(instance_id, database_id):
     operation.result()
 
     print('Added the MarketingBudget column.')
+# [END spanner_add_column]
 
 
+# [START spanner_update_data]
 def update_data(instance_id, database_id):
     """Updates sample data in the database.
 
@@ -333,8 +358,10 @@ def update_data(instance_id, database_id):
                 (2, 2, 500000)])
 
     print('Updated data.')
+# [END spanner_update_data]
 
 
+# [START spanner_read_write_transaction]
 def read_write_transaction(instance_id, database_id):
     """Performs a read-write transaction to update two sample records in the
     database.
@@ -395,8 +422,10 @@ def read_write_transaction(instance_id, database_id):
     database.run_in_transaction(update_albums)
 
     print('Transaction complete.')
+# [END spanner_read_write_transaction]
 
 
+# [START spanner_read_only_transaction]
 def read_only_transaction(instance_id, database_id):
     """Reads data inside of a read-only transaction.
 
@@ -428,9 +457,148 @@ def read_only_transaction(instance_id, database_id):
         print('Results from second read:')
         for row in results:
             print(u'SingerId: {}, AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_read_only_transaction]
 
 
-if __name__ == '__main__':
+# [START spanner_create_table_with_timestamp_column]
+def create_table_with_timestamp(instance_id, database_id):
+    """Creates a table with a COMMIT_TIMESTAMP column."""
+
+    spanner_client = spanner.Client()
+    instance = spanner_client.instance(instance_id)
+    database = instance.database(database_id)
+
+    operation = database.update_ddl([
+        """CREATE TABLE Performances (
+            SingerId     INT64 NOT NULL,
+            VenueId      INT64 NOT NULL,
+            EventDate    Date,
+            Revenue      INT64,
+            LastUpdateTime TIMESTAMP NOT NULL
+            OPTIONS(allow_commit_timestamp=true)
+        ) PRIMARY KEY (SingerId, VenueId, EventDate),
+          INTERLEAVE IN PARENT Singers ON DELETE CASCADE"""
+    ])
+
+    print('Waiting for operation to complete...')
+    operation.result()
+
+    print('Created Performances table on database {} on instance {}'.format(
+        database_id, instance_id))
+# [END spanner_create_table_with_timestamp_column]
+
+
+# [START spanner_insert_data_with_timestamp_column]
+def insert_data_with_timestamp(instance_id, database_id):
+    """Inserts data with a COMMIT_TIMESTAMP field into a table. """
+
+    spanner_client = spanner.Client()
+    instance = spanner_client.instance(instance_id)
+
+    database = instance.database(database_id)
+
+    with database.batch() as batch:
+        batch.insert(
+            table='Performances',
+            columns=(
+                'SingerId', 'VenueId', 'EventDate',
+                'Revenue', 'LastUpdateTime',),
+            values=[
+                (1, 4, "2017-10-05", 11000, spanner.COMMIT_TIMESTAMP),
+                (1, 19, "2017-11-02", 15000, spanner.COMMIT_TIMESTAMP),
+                (2, 42, "2017-12-23", 7000, spanner.COMMIT_TIMESTAMP)])
+
+    print('Inserted data.')
+# [END spanner_insert_data_with_timestamp_column]
+
+
+# [START spanner_add_timestamp_column]
+def add_timestamp_column(instance_id, database_id):
+    """
+    Adds a new TIMESTAMP column to the Albums table in the example database.
+    """
+    spanner_client = spanner.Client()
+    instance = spanner_client.instance(instance_id)
+
+    database = instance.database(database_id)
+
+    operation = database.update_ddl([
+        'ALTER TABLE Albums ADD COLUMN LastUpdateTime TIMESTAMP '
+        'OPTIONS(allow_commit_timestamp=true)'])
+
+    print('Waiting for operation to complete...')
+    operation.result()
+
+    print('Altered table "Albums" on database {} on instance {}.'.format(
+        database_id, instance_id))
+# [END spanner_add_timestamp_column]
+
+
+# [START spanner_update_data_with_timestamp_column]
+def update_data_with_timestamp(instance_id, database_id):
+    """Updates Performances tables in the database with the COMMIT_TIMESTAMP
+    column.
+
+    This updates the `MarketingBudget` column which must be created before
+    running this sample. You can add the column by running the `add_column`
+    sample or by running this DDL statement against your database:
+
+        ALTER TABLE Albums ADD COLUMN MarketingBudget INT64
+
+    In addition this update expects the LastUpdateTime column added by
+    applying this DDL statement against your database:
+
+        ALTER TABLE Albums ADD COLUMN LastUpdateTime TIMESTAMP
+        OPTIONS(allow_commit_timestamp=true)
+    """
+    spanner_client = spanner.Client()
+    instance = spanner_client.instance(instance_id)
+
+    database = instance.database(database_id)
+
+    with database.batch() as batch:
+        batch.update(
+            table='Albums',
+            columns=(
+                'SingerId', 'AlbumId', 'MarketingBudget', 'LastUpdateTime'),
+            values=[
+                (1, 4, 11000, spanner.COMMIT_TIMESTAMP),
+                (1, 19, 15000, spanner.COMMIT_TIMESTAMP),
+                (2, 42, 7000, spanner.COMMIT_TIMESTAMP)])
+
+    print('Updated data.')
+# [END spanner_update_data_with_timestamp_column]
+
+
+# [START spanner_query_data_with_timestamp_column]
+def query_data_with_timestamp(instance_id, database_id):
+    """Queries sample data from the database using SQL.
+
+    This updates the `LastUpdateTime` column which must be created before
+    running this sample. You can add the column by running the
+    `add_timestamp_column` sample or by running this DDL statement
+    against your database:
+
+        ALTER TABLE Performances ADD COLUMN LastUpdateTime TIMESTAMP
+        OPTIONS (allow_commit_timestamp=true)
+
+    """
+    spanner_client = spanner.Client()
+    instance = spanner_client.instance(instance_id)
+
+    database = instance.database(database_id)
+
+    with database.snapshot() as snapshot:
+        results = snapshot.execute_sql(
+            'SELECT SingerId, AlbumId, AlbumTitle FROM Albums '
+            'ORDER BY LastUpdateTime DESC')
+
+    for row in results:
+        print(u'SingerId: {}, AlbumId: {}, AlbumTitle: {}'.format(*row))
+# [END spanner_query_data_with_timestamp_column]
+
+
+if __name__ == '__main__':  # noqa: C901
     parser = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -465,6 +633,17 @@ if __name__ == '__main__':
     subparsers.add_parser('add_storing_index', help=add_storing_index.__doc__)
     subparsers.add_parser(
         'read_data_with_storing_index', help=insert_data.__doc__)
+    subparsers.add_parser(
+        'create_table_with_timestamp',
+        help=create_table_with_timestamp.__doc__)
+    subparsers.add_parser(
+        'insert_data_with_timestamp', help=insert_data_with_timestamp.__doc__)
+    subparsers.add_parser(
+        'add_timestamp_column', help=add_timestamp_column.__doc__)
+    subparsers.add_parser(
+        'update_data_with_timestamp', help=update_data_with_timestamp.__doc__)
+    subparsers.add_parser(
+        'query_data_with_timestamp', help=query_data_with_timestamp.__doc__)
 
     args = parser.parse_args()
 
@@ -500,3 +679,13 @@ if __name__ == '__main__':
         add_storing_index(args.instance_id, args.database_id)
     elif args.command == 'read_data_with_storing_index':
         read_data_with_storing_index(args.instance_id, args.database_id)
+    elif args.command == 'create_table_with_timestamp':
+        create_table_with_timestamp(args.instance_id, args.database_id)
+    elif args.command == 'insert_data_with_timestamp':
+        insert_data_with_timestamp(args.instance_id, args.database_id)
+    elif args.command == 'add_timestamp_column':
+        add_timestamp_column(args.instance_id, args.database_id)
+    elif args.command == 'update_data_with_timestamp':
+        update_data_with_timestamp(args.instance_id, args.database_id)
+    elif args.command == 'query_data_with_timestamp':
+        query_data_with_timestamp(args.instance_id, args.database_id)
