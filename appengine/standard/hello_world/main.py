@@ -14,96 +14,54 @@
 
 import webapp2
 import cgi
-import re
 
-form = """
-<!DOCTYPE html>
-<html>
-<head>
-<title>Udacity Web Dev Sign-up</title>
-</head>
-<body>
-<h2>Sign-up</h2>
-<br>
-<form method="post">
-    <label>
-        Username
-        <input type="text" name="username" value="%(username)s">
-    </label>
-    <span style="color: red">%(username_error)s</span>
-    <br>
-    <label>
-        Password
-        <input type="password" name="password">
-    </label>
-    <span style="color: red">%(pass_error)s</span>
-    <br>
-    <label>
-        Verify Password
-        <input type="password" name="verify">
-    </label>
-    <span style="color: red">%(verify_error)s</span>
-    <br>
-    <label>
-        Email (optional)
-        <input type="text" name="email" value="%(email)s">
-    </label>
-    <span style="color: red">%(email_error)s</span>
-    <br>
-    <input type="submit">
+form_html = """
+<form>
+<h2>Add Food</h2>
+<input type="text" name="food">
+%s
+<button>Add</button>
 </form>
-</body>
-</html>
 """
 
-USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
-def valid_username(username):
-    return USER_RE.match(username)
+hidden_html= """
+<input type="hidden" name="food" value="%s">
+"""
+# hidden: include values in our query that the user can't see or interact with. This is different from type=password. Note that multiple query items can have
+# the same name, so if you have a hidden input with name food and a text input with name food: ?food=val1&food=val2 is possible
+shopping_html = """
+<br>
+<br>
+<h2>Shopping List</h2>
+<ul>
+%s
+</ul>
+"""
 
-PASSWORD_RE = re.compile(r"^.{3,20}$")
-def valid_password(password):
-    return PASSWORD_RE.match(password)
+item_html = "<li>%s</li>"
 
-EMAIL_RE = re.compile(r"^[\S]+@[\S]+.[\S]+$")
-def valid_email(email):
-    if not email:
-        return True
-    return EMAIL_RE.match(email)
+class Handler(webapp2.RequestHandler):
+    def write(self, *a, **ka):
+        self.response.out.write(*a, **ka)
 
-def verify_password(str1, str2):
-    return str1 == str2
-
-class MainPage(webapp2.RequestHandler):
-    def write_form(self, username_error="", pass_error="", verify_error="", email_error="", username="", email=""):
-        self.response.out.write(form % {'username_error': username_error, 'pass_error': pass_error, 'verify_error': verify_error, 'email_error': email_error, 'username': username, 'email': email})
-
+        
+class MainPage(Handler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        self.write_form()
+        output = form_html
+        output_hidden = ""
+        output_items = ""
 
-    def post(self):
-        self.response.headers['Content-Type'] = 'text/html'
+        items = self.request.get_all('food') # get all params with name food
+        if items:
 
-        username = self.request.get('username')
-        password = self.request.get('password')
-        verify = self.request.get('verify')
-        email = self.request.get('email')
+            for item in items:
+                output_hidden += hidden_html % item
+                output_items += item_html % item
 
-        username_error = valid_username(username)
-        password_error = valid_password(password)
-        email_error = valid_email(email)
-        verify_error = verify_password(password, verify)
+            output_shopping = shopping_html % output_items
+            output += output_shopping
 
-        if not username_error or not password_error or not email_error or not verify_error:
-            self.write_form(username_error="Invalid username" if not username_error else "", pass_error="Invalid password" if not password_error else "",
-                verify_error="Passwords don't match" if not verify_error else "", email_error="Invalid email" if not email_error else "", username=username, email=email)
-        else:
-            self.redirect('/welcome?username=%s' % username)
+        output = output % output_hidden
+        self.write(output)
 
-class WelcomePage(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write("<h2>Welcome, %s!</h2>" % self.request.get('username'))
-
-
-app = webapp2.WSGIApplication([('/', MainPage), ('/welcome', WelcomePage)], debug=True)
+app = webapp2.WSGIApplication([('/', MainPage)], debug=True)
